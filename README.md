@@ -8,7 +8,7 @@ The API is based upon the [TransIP API v5.4](https://www.transip.nl/transip/api/
 available endpoints some methods and their return values have changed.
 
 ## Transip API documentation
-The latest official [Transip API documention](https://api.transip.nl/rest/docs.html?_ga=2.63831983.1856092536.1498598136-604397782.1486557205)
+The latest official [Transip API documention](https://api.transip.nl/rest/docs.html
 lists all available methods and corresponding paramters. These methods shall be converted into self containing classes
 so requests can easily be done without having to check if you've got all nessasary data added.
 
@@ -21,7 +21,7 @@ Due to the lifetime of each given token, the tokens must be refreshed frequently
 include a JWT handler to get this done for you.
 
 ## Getting started.
-1. Download the [authenticatie class](https://api.transip.nl/downloads/TransIP_AccessToken.tar.gz?_ga=2.195528682.714284166.1498641216-602751744.1497268499)
+1. Download the [authenticatie class](https://api.transip.nl/downloads/TransIP_AccessToken.tar.gz
    and save the TransIP_AccessToken.php into the root of the Package.
    When the link doesn't work, login to your CP and navigate to Account » API.
 2. In TransIP_AccessToken.php, set both the `LOGIN` and `PRIVATE_KEY` constants, with your username and the private key
