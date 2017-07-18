@@ -52,12 +52,22 @@ abstract class Rest
         return $this->http_code;
     }
 
+    final public function setTempDir($temp_dir)
+    {
+        return $this->temp_dir = rtrim($temp_dir, DIRECTORY_SEPARATOR);
+    }
+
     protected $version = 0.1;
+
+    /**
+     * @var \TransIP_AccessToken|null
+     */
     private $accesstoken = null;
     private $accesstoken_string = '';
     // https://ENDPOINT/VERSION/URI
     private $url_format = 'https://%1$s/%2$s/%3$s';
     private $http_code = 0;
+    private $temp_dir = '';
 
     /**
      * Execute the actual request and return an array with the results
@@ -121,8 +131,30 @@ abstract class Rest
             return $this->accesstoken_string;
         }
 
+        // Try loading file from temp, unless it's expired
+        $temp_file = $path = $this->getTempDir() . DIRECTORY_SEPARATOR . md5(\TransIP_AccessToken::PRIVATE_KEY);
+        if (file_exists($temp_file) && filemtime($temp_file) > time()) {
+            $this->accesstoken_string = file_get_contents($temp_file);
+            return $this->accesstoken_string;
+        }
+
+        // Create new token
         $this->accesstoken_string = $this->accesstoken->createToken();
+
+        // Save file to temp, adjusting its mtime so we can check if it's expired
+        file_put_contents($temp_file, $this->accesstoken_string);
+        touch($temp_file, strtotime(\TransIP_AccessToken::EXPIRATION_TIME, time()));
+
         return $this->accesstoken_string;
+    }
+
+    private function getTempdir()
+    {
+        if (!$this->temp_dir || !is_writable($this->temp_dir)) {
+            return sys_get_temp_dir();
+        }
+
+        return $this->temp_dir;
     }
 
 }
